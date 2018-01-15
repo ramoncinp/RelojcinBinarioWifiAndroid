@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/connection"
+        android:icon="@drawable/sync_menu"
+        android:orderInCategory="0"
+        android:title="Conectarse"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/alarm"
+        android:icon="@drawable/alarm_menu"
+        android:orderInCategory="1"
+        android:title="Alarma"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/redInfo"
+        android:orderInCategory="2"
+        android:icon="@drawable/settings_menu"
+        android:title="Configuraciones"
+        app:showAsAction="ifRoom"/>
+</menu>

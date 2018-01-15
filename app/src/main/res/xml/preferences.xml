@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <EditTextPreference
+        android:title="Red Externa"
+        android:key="ssid"
+        android:summary="Ingrese el nombre de la red a conectarse"
+        android:inputType="text"/>
+
+    <EditTextPreference
+        android:title="Contraseña"
+        android:key="pass"
+        android:summary="Ingrese la contraseña de la red a conectarse"
+        android:inputType="textPassword"/>
+
+</PreferenceScreen>
