@@ -40,27 +40,6 @@ public class Client extends AsyncTask<String, Void, String>
         this.serverPort = serverPort;
     }
 
-    /**
-     * Close the connection and release the members
-     */
-    private void stopClient()
-    {
-        if (mBufferOut != null)
-        {
-            mBufferOut.flush();
-            mBufferOut.close();
-        }
-
-        if (mMessageListener != null)
-        {
-            mMessageListener = null;
-        }
-
-        mBufferIn = null;
-        mBufferOut = null;
-        mServerMessage = null;
-    }
-
     private String run(String message)
     {
         try
@@ -97,15 +76,14 @@ public class Client extends AsyncTask<String, Void, String>
 
                 if ((charsRead = mBufferIn.read(buffer)) != -1 && mMessageListener != null)
                 {
-                    String mServerMessage = new String(buffer).substring(0, charsRead);
-                    mMessageListener.messageReceived(mServerMessage);
+                    mServerMessage = new String(buffer).substring(0, charsRead);
                     Log.d("RESPONSE FROM SERVER", "S: Received Message: '" + mServerMessage + "'");
                 }
             }
             catch (Exception e)
             {
                 Log.e("TCP", "S: Error", e);
-                mMessageListener.messageReceived("error");
+                mServerMessage = "error";
             }
             finally
             {
@@ -121,8 +99,9 @@ public class Client extends AsyncTask<String, Void, String>
         catch (Exception e)
         {
             Log.e("TCP", "C: Error", e);
-            mMessageListener.messageReceived("error");
+            mServerMessage = "error";
         }
+
         return mServerMessage;
     }
 
@@ -144,5 +123,7 @@ public class Client extends AsyncTask<String, Void, String>
     public interface OnMessageReceived
     {
         void messageReceived(String message);
+
+        void errorMessage(String errorMessage);
     }
 }

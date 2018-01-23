@@ -1,6 +1,5 @@
 package com.example.msi.relojcinbinario;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -8,25 +7,18 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.icu.util.Calendar;
-import android.icu.util.TimeZone;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.Uri;
 import android.net.wifi.WifiManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
-import android.provider.CalendarContract;
-import android.provider.Settings;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -68,11 +60,32 @@ public class MainActivity extends AppCompatActivity
     private Button mu3;
     private Button mu4;
 
-    private Client mTcpClient;
+    private Client.OnMessageReceived clientListener = new Client.OnMessageReceived()
+    {
+        @Override
+        public void messageReceived(String message)
+        {
+            if (!message.contains("error"))
+            {
+                checkMessage(message);
+            }
+            else
+            {
+                Toast.makeText(MainActivity.this,
+                        "Error de comunicacion",
+                        Toast.LENGTH_LONG).show();
+            }
+        }
+
+        @Override
+        public void errorMessage(String errorMessage)
+        {
+            Toast.makeText(MainActivity.this, errorMessage, Toast.LENGTH_LONG).show();
+        }
+    };
+
     public ProgressDialog ringProgressDialog;
-
-    Button buttons[][] = new Button[4][4];
-
+    private Button buttons[][] = new Button[4][4];
     private Handler minuteHandler = new Handler();
 
     final Runnable minuteTimer = new Runnable()
@@ -165,15 +178,6 @@ public class MainActivity extends AppCompatActivity
 
         initButtonArray();
         digitalToBinaryClock();
-
-        Client client = new Client(new Client.OnMessageReceived()
-        {
-            @Override
-            public void messageReceived(String message)
-            {
-
-            }
-        }, "192.168.0.182", 8888);
     }
 
     private void sendTime()
@@ -183,7 +187,9 @@ public class MainActivity extends AppCompatActivity
         paquete += "h" + horas + '\n';
         paquete += "m" + minutos + '\n';
 
-        //mTcpClient.sendMessage(paquete);
+        new Client(clientListener,
+                "192.168.4.1",
+                80).execute(paquete);
     }
 
     @Override
@@ -205,20 +211,14 @@ public class MainActivity extends AppCompatActivity
                 {
                     if (connectedToWifi)
                     {
-                        //new ConnectTask().execute("");
-                        ringProgressDialog = ProgressDialog.show(MainActivity.this, "", "Conectándose...", true);
+                        sendTime();
+                        Toast.makeText(MainActivity.this,
+                                "Sincronizando",
+                                Toast.LENGTH_LONG).show();
                     }
                     else
                     {
                         Toast.makeText(this, "Sin conexión Wifi", Toast.LENGTH_SHORT).show();
-                    }
-                }
-                else
-                {
-                    if (mTcpClient != null)
-                    {
-                        //mTcpClient.stopClient();
-                        mTcpClient = null;
                     }
                 }
 
@@ -397,11 +397,7 @@ public class MainActivity extends AppCompatActivity
     protected void onDestroy()
     {
         super.onDestroy();
-        if (mTcpClient != null)
-        {
-            //mTcpClient.stopClient();
-            mTcpClient = null;
-        }
+
     }
 
     private int getSeconds()
@@ -410,23 +406,6 @@ public class MainActivity extends AppCompatActivity
         String date = df.format(new Date());
         return Integer.parseInt(date);
     }
-
-    private void updateMenuTitles()
-    {
-        if (menu != null)
-        {
-            MenuItem connectItem = menu.findItem(R.id.connection);
-            if (connected)
-            {
-                connectItem.setTitle("Desconectar");
-            }
-            else
-            {
-                connectItem.setTitle("Conectar");
-            }
-        }
-    }
-
 
     private void initButtonArray()
     {
@@ -620,65 +599,4 @@ public class MainActivity extends AppCompatActivity
             }
         }
     }
-/*
-    public class ConnectTask extends AsyncTask<String, String, Client>
-    {
-        @Override
-        protected Client doInBackground(String... message)
-        {
-            //we create a TCPClient object and
-            mTcpClient = new Client(new Client.OnMessageReceived()
-            {
-                @Override
-                //here the messageReceived method is implemented
-                public void messageReceived(String message)
-                {
-                    //this method calls the onProgressUpdate
-                    publishProgress(message, "");
-                }
-
-                @Override
-                public void stateChanged(String state)
-                {
-                    publishProgress("", state);
-                }
-            }, "192.168.4.1", 80);
-
-            //mTcpClient.run();
-
-            return null;
-        }
-
-        @Override
-        protected void onProgressUpdate(String... values)
-        {
-            super.onProgressUpdate(values);
-
-            if (!values[0].equals(""))
-            {
-                //Legó un mensaje en values[0]
-                checkMessage(values[0]);
-            } else
-            {
-                if (ringProgressDialog != null) ringProgressDialog.cancel();
-
-                if (values[1].equals("conectado"))
-                {
-                    connected = true;
-                    sendTime();
-                    Toast.makeText(getBaseContext(), "Conectado", Toast.LENGTH_SHORT).show();
-                } else if (values[1].equals("desconectado"))
-                {
-                    connected = false;
-                    Toast.makeText(getBaseContext(), "Desconectado", Toast.LENGTH_SHORT).show();
-                } else
-                {
-                    Toast.makeText(getBaseContext(), "Error de conexión", Toast.LENGTH_SHORT).show();
-                    connected = false;
-                }
-                updateMenuTitles();
-            }
-        }
-    }
-    */
 }
