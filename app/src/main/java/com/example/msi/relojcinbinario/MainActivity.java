@@ -9,6 +9,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -129,7 +130,7 @@ public class MainActivity extends AppCompatActivity
                     {
                         WifiManager wifiManager = (WifiManager) context.getApplicationContext().
                                 getSystemService(context.WIFI_SERVICE);
-/*
+
                         if (wifiManager != null)
                         {
                             WifiInfo wifiInfo = wifiManager.getConnectionInfo();
@@ -144,7 +145,6 @@ public class MainActivity extends AppCompatActivity
                                 connectedToWifi = false;
                             }
                         }
-*/
                         connectedToWifi = true;
                     }
                     else
@@ -614,7 +614,7 @@ public class MainActivity extends AppCompatActivity
     public void sendMessage(String mMessage)
     {
         new Client(clientListener,
-                "192.168.0.182",
-                9999).execute(mMessage);
+                "192.168.4.1",
+                80).execute(mMessage);
     }
 }
