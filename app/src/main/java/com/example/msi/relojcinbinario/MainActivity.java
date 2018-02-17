@@ -9,6 +9,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -23,6 +24,8 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.TextClock;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.DateFormat;
@@ -57,6 +60,8 @@ public class MainActivity extends AppCompatActivity
     private Button mu2;
     private Button mu3;
     private Button mu4;
+
+    private TextView connectionStatus;
 
     private Client.OnMessageReceived clientListener = new Client.OnMessageReceived()
     {
@@ -125,13 +130,29 @@ public class MainActivity extends AppCompatActivity
                 {
                     if (netInfo.isConnected())
                     {
-                        connectedToWifi = true;
+                        WifiManager wifiManager = (WifiManager) context.getApplicationContext().
+                                getSystemService(context.WIFI_SERVICE);
 
+                        if (wifiManager != null)
+                        {
+                            WifiInfo wifiInfo = wifiManager.getConnectionInfo();
+                            String ssid = wifiInfo.getSSID();
+
+                            if (ssid.contains("RELOJCIN_WIFI"))
+                            {
+                                connectedToWifi = true;
+                            }
+                            else
+                            {
+                                connectedToWifi = false;
+                            }
+                        }
                     }
                     else
                     {
                         connectedToWifi = false;
                     }
+                    evaluateConnection();
                 }
             }
         }
@@ -157,6 +178,8 @@ public class MainActivity extends AppCompatActivity
         mu3 = (Button) findViewById(R.id.mu3);
         mu4 = (Button) findViewById(R.id.mu4);
 
+        connectionStatus = (TextView) findViewById(R.id.connectionStatus);
+
         tickReceiver = new BroadcastReceiver()
         {
             @Override
@@ -174,6 +197,8 @@ public class MainActivity extends AppCompatActivity
         //Register the broadcast receiver to receive TIME_TICK
         registerReceiver(tickReceiver, new IntentFilter(Intent.ACTION_TIME_TICK));
 
+        evaluateConnection();
+
         initButtonArray();
         digitalToBinaryClock();
     }
@@ -188,6 +213,17 @@ public class MainActivity extends AppCompatActivity
         new Client(clientListener,
                 "192.168.4.1",
                 80).execute(paquete);
+    }
+
+    private void evaluateConnection()
+    {
+        if (connectionStatus != null)
+        {
+            if (connectedToWifi)
+                connectionStatus.setText("CONECTADO");
+            else
+                connectionStatus.setText("DESCONECTADO");
+        }
     }
 
     @Override

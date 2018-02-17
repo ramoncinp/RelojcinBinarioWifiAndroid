@@ -9,9 +9,26 @@
     tools:context="com.example.msi.relojcinbinario.MainActivity">
 
     <LinearLayout
+        android:layout_marginTop="8dp"
         android:layout_width="match_parent"
-        android:layout_weight="1"
         android:layout_height="0dp"
+        android:layout_weight="0.2"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/connectionStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="CONTECTADO"
+            android:layout_gravity="center_horizontal"
+            android:textColor="@color/white"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:orientation="horizontal">
 
         <RelativeLayout
@@ -35,11 +52,11 @@
 
             <Button
                 android:id="@+id/hu4"
+                android:layout_width="@dimen/circle_size"
+                android:layout_height="@dimen/circle_size"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
-                android:background="@drawable/white_button"
-                android:layout_width="@dimen/circle_size"
-                android:layout_height="@dimen/circle_size"/>
+                android:background="@drawable/white_button"/>
 
         </RelativeLayout>
 
@@ -57,11 +74,11 @@
 
             <Button
                 android:id="@+id/mu4"
+                android:layout_width="@dimen/circle_size"
+                android:layout_height="@dimen/circle_size"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
-                android:background="@drawable/white_button"
-                android:layout_width="@dimen/circle_size"
-                android:layout_height="@dimen/circle_size"/>
+                android:background="@drawable/white_button"/>
 
         </RelativeLayout>
 
@@ -76,8 +93,8 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_weight="1"
         android:layout_height="0dp"
+        android:layout_weight="1"
         android:orientation="horizontal">
 
         <RelativeLayout
@@ -102,11 +119,11 @@
 
             <Button
                 android:id="@+id/hu3"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true"
-                android:background="@drawable/white_button"
                 android:layout_width="@dimen/circle_size"
-                android:layout_height="@dimen/circle_size"/>
+                android:layout_height="@dimen/circle_size"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:background="@drawable/white_button"/>
 
         </RelativeLayout>
 
@@ -117,11 +134,11 @@
 
             <Button
                 android:id="@+id/md3"
-                android:layout_centerHorizontal="true"
-                android:background="@drawable/white_button"
-                android:layout_centerVertical="true"
                 android:layout_width="@dimen/circle_size"
-                android:layout_height="@dimen/circle_size"/>
+                android:layout_height="@dimen/circle_size"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:background="@drawable/white_button"/>
 
         </RelativeLayout>
 
@@ -132,10 +149,10 @@
 
             <Button
                 android:id="@+id/mu3"
-                android:layout_centerVertical="true"
                 android:layout_width="@dimen/circle_size"
                 android:layout_height="@dimen/circle_size"
                 android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
                 android:background="@drawable/white_button"/>
 
         </RelativeLayout>
@@ -151,8 +168,8 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_weight="1"
         android:layout_height="0dp"
+        android:layout_weight="1"
         android:orientation="horizontal">
 
         <RelativeLayout
@@ -169,11 +186,11 @@
 
             <Button
                 android:id="@+id/hd2"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true"
-                android:background="@drawable/white_button"
                 android:layout_width="@dimen/circle_size"
-                android:layout_height="@dimen/circle_size"/>
+                android:layout_height="@dimen/circle_size"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:background="@drawable/white_button"/>
 
         </RelativeLayout>
 
@@ -184,11 +201,11 @@
 
             <Button
                 android:id="@+id/hu2"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true"
-                android:background="@drawable/white_button"
                 android:layout_width="@dimen/circle_size"
-                android:layout_height="@dimen/circle_size"/>
+                android:layout_height="@dimen/circle_size"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:background="@drawable/white_button"/>
 
         </RelativeLayout>
 
@@ -199,11 +216,11 @@
 
             <Button
                 android:id="@+id/md2"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true"
-                android:background="@drawable/white_button"
                 android:layout_width="@dimen/circle_size"
-                android:layout_height="@dimen/circle_size"/>
+                android:layout_height="@dimen/circle_size"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:background="@drawable/white_button"/>
 
         </RelativeLayout>
 
@@ -214,11 +231,11 @@
 
             <Button
                 android:id="@+id/mu2"
+                android:layout_width="@dimen/circle_size"
+                android:layout_height="@dimen/circle_size"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
-                android:background="@drawable/white_button"
-                android:layout_width="@dimen/circle_size"
-                android:layout_height="@dimen/circle_size"/>
+                android:background="@drawable/white_button"/>
 
         </RelativeLayout>
 
@@ -233,8 +250,8 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_weight="1"
         android:layout_height="0dp"
+        android:layout_weight="1"
         android:orientation="horizontal">
 
         <RelativeLayout
@@ -251,11 +268,11 @@
 
             <Button
                 android:id="@+id/hd1"
+                android:layout_width="@dimen/circle_size"
+                android:layout_height="@dimen/circle_size"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
-                android:background="@drawable/white_button"
-                android:layout_width="@dimen/circle_size"
-                android:layout_height="@dimen/circle_size"/>
+                android:background="@drawable/white_button"/>
 
         </RelativeLayout>
 
@@ -266,11 +283,11 @@
 
             <Button
                 android:id="@+id/hu1"
+                android:layout_width="@dimen/circle_size"
+                android:layout_height="@dimen/circle_size"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
-                android:background="@drawable/white_button"
-                android:layout_width="@dimen/circle_size"
-                android:layout_height="@dimen/circle_size"/>
+                android:background="@drawable/white_button"/>
 
         </RelativeLayout>
 
@@ -281,11 +298,11 @@
 
             <Button
                 android:id="@+id/md1"
+                android:layout_width="@dimen/circle_size"
+                android:layout_height="@dimen/circle_size"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
-                android:background="@drawable/white_button"
-                android:layout_width="@dimen/circle_size"
-                android:layout_height="@dimen/circle_size"/>
+                android:background="@drawable/white_button"/>
 
         </RelativeLayout>
 
@@ -296,11 +313,11 @@
 
             <Button
                 android:id="@+id/mu1"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true"
-                android:background="@drawable/white_button"
                 android:layout_width="@dimen/circle_size"
-                android:layout_height="@dimen/circle_size"/>
+                android:layout_height="@dimen/circle_size"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:background="@drawable/white_button"/>
 
         </RelativeLayout>
 
@@ -316,8 +333,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:orientation="horizontal"
-        android:layout_weight="0.2">
+        android:layout_weight="0.2"
+        android:orientation="horizontal">
 
     </LinearLayout>
 
