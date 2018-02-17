@@ -9,7 +9,6 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -24,7 +23,6 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.TextClock;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,7 +35,6 @@ public class MainActivity extends AppCompatActivity
     private static BroadcastReceiver tickReceiver;
     private boolean isRegistered = false;
     private boolean isReceiverRegistered = false;
-    private boolean connected = false;
     private boolean connectedToWifi = false;
     private boolean alarmActivated = false;
 
@@ -113,7 +110,7 @@ public class MainActivity extends AppCompatActivity
                 }
             }
 
-            sendTime();
+            if (connectedToWifi) sendTime();
             minuteHandler.postDelayed(minuteTimer, 60000 - (getSeconds() * 1000));
         }
     };
@@ -190,7 +187,7 @@ public class MainActivity extends AppCompatActivity
                 if (intent.getAction().compareTo(Intent.ACTION_TIME_TICK) == 0)
                 {
                     digitalToBinaryClock();
-                    if (connected) sendTime();
+                    sendTime();
                 }
             }
         };
@@ -230,7 +227,6 @@ public class MainActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu)
     {
         getMenuInflater().inflate(R.menu.menu, menu);
-
         return true;
     }
 
@@ -240,19 +236,16 @@ public class MainActivity extends AppCompatActivity
         switch (item.getItemId())
         {
             case R.id.connection:
-                if (!connected)
+                if (connectedToWifi)
                 {
-                    if (connectedToWifi)
-                    {
-                        sendTime();
-                        Toast.makeText(MainActivity.this,
-                                "Sincronizando",
-                                Toast.LENGTH_LONG).show();
-                    }
-                    else
-                    {
-                        Toast.makeText(this, "Sin conexión Wifi", Toast.LENGTH_SHORT).show();
-                    }
+                    sendTime();
+                    Toast.makeText(MainActivity.this,
+                            "Sincronizando",
+                            Toast.LENGTH_LONG).show();
+                }
+                else
+                {
+                    Toast.makeText(this, "Sin conexión Wifi", Toast.LENGTH_SHORT).show();
                 }
 
                 return true;
@@ -317,24 +310,14 @@ public class MainActivity extends AppCompatActivity
                         if (checkBox.isChecked())
                         {
                             alarmActivated = true;
-                            if (connected)
-                            {
-                                //mTcpClient.sendMessage("a" + alarmTime + '\n');
-                                Toast.makeText(getApplicationContext(), "Alarma configurada", Toast.LENGTH_SHORT).show();
-                            }
+                            sendMessage("a" + alarmTime + '\n');
+                            Toast.makeText(getApplicationContext(), "Alarma configurada", Toast.LENGTH_SHORT).show();
+
                         }
                         else
                         {
                             alarmActivated = false;
-                            if (connected)
-                            {
-                                // mTcpClient.sendMessage("a0\n");
-                            }
-                        }
-
-                        if (!connected)
-                        {
-                            Toast.makeText(getApplicationContext(), "Conectarse para aplicar cambios", Toast.LENGTH_SHORT).show();
+                            sendMessage("a0\n");
                         }
                     }
                 })
@@ -356,18 +339,12 @@ public class MainActivity extends AppCompatActivity
         {
             case 1:
                 String paquete = getInfo(); //obtener informacion de la red
-                if (!connected)
+                if (!paquete.equals(""))
                 {
-                    Toast.makeText(this, "Conexión no establecida", Toast.LENGTH_SHORT).show();
+                    //mTcpClient.sendMessage(paquete);
+                    Toast.makeText(this, "Editando información", Toast.LENGTH_SHORT).show();
                 }
-                else
-                {
-                    if (!paquete.equals(""))
-                    {
-                        //mTcpClient.sendMessage(paquete);
-                        Toast.makeText(this, "Editando información", Toast.LENGTH_SHORT).show();
-                    }
-                }
+
                 break;
         }
     }
@@ -419,11 +396,12 @@ public class MainActivity extends AppCompatActivity
             isReceiverRegistered = false;
             unregisterReceiver(myWifiReceiver);
         }
-
+        /*
         if (connected)
         {
             minuteHandler.postDelayed(minuteTimer, 60000 - (getSeconds() * 1000));
         }
+        */
     }
 
     @Override
