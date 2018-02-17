@@ -12,10 +12,6 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 
-/**
- * Created by MSI on 05/07/2017.
- */
-
 public class Client extends AsyncTask<String, Void, String>
 {
 
@@ -82,8 +78,7 @@ public class Client extends AsyncTask<String, Void, String>
             }
             catch (Exception e)
             {
-                Log.e("TCP", "S: Error", e);
-                mServerMessage = "error";
+                mServerMessage = "Error de comunicación";
             }
             finally
             {
@@ -98,8 +93,7 @@ public class Client extends AsyncTask<String, Void, String>
         }
         catch (Exception e)
         {
-            Log.e("TCP", "C: Error", e);
-            mServerMessage = "error";
+            mServerMessage = "Error de conexión";
         }
 
         return mServerMessage;
@@ -115,7 +109,10 @@ public class Client extends AsyncTask<String, Void, String>
     @Override
     protected void onPostExecute(String serverMessage)
     {
-        mMessageListener.messageReceived(serverMessage);
+        if (serverMessage.contains("Error"))
+            mMessageListener.errorMessage(serverMessage);
+        else
+            mMessageListener.messageReceived(serverMessage);
     }
 
     //Declare the interface. The method messageReceived(String message) will must be implemented in the MyActivity

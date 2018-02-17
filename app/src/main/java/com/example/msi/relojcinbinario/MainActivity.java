@@ -132,7 +132,7 @@ public class MainActivity extends AppCompatActivity
                     {
                         WifiManager wifiManager = (WifiManager) context.getApplicationContext().
                                 getSystemService(context.WIFI_SERVICE);
-
+/*
                         if (wifiManager != null)
                         {
                             WifiInfo wifiInfo = wifiManager.getConnectionInfo();
@@ -147,6 +147,8 @@ public class MainActivity extends AppCompatActivity
                                 connectedToWifi = false;
                             }
                         }
+*/
+                        connectedToWifi = true;
                     }
                     else
                     {
@@ -210,9 +212,7 @@ public class MainActivity extends AppCompatActivity
         paquete += "h" + horas + '\n';
         paquete += "m" + minutos + '\n';
 
-        new Client(clientListener,
-                "192.168.4.1",
-                80).execute(paquete);
+        sendMessage(paquete);
     }
 
     private void evaluateConnection()
@@ -631,5 +631,12 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         }
+    }
+
+    public void sendMessage(String mMessage)
+    {
+        new Client(clientListener,
+                "192.168.0.182",
+                9999).execute(mMessage);
     }
 }
