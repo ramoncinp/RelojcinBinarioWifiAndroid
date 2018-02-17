@@ -38,8 +38,6 @@ public class MainActivity extends AppCompatActivity
     private boolean connectedToWifi = false;
     private boolean alarmActivated = false;
 
-    private Menu menu;
-
     private String ssid = "";
     private String pass = "";
     private String horas = "";
@@ -196,7 +194,6 @@ public class MainActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu)
     {
         getMenuInflater().inflate(R.menu.menu, menu);
-        this.menu = menu;
 
         return true;
     }
