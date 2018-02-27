@@ -25,6 +25,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Toast;
+import android.support.design.widget.Snackbar;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -589,8 +590,17 @@ public class MainActivity extends AppCompatActivity
 
     public void sendMessage(String mMessage)
     {
-        new Client(clientListener,
-                "192.168.4.1",
-                80).execute(mMessage);
+        if (connectedToWifi)
+        {
+            new Client(clientListener,
+                    "192.168.4.1",
+                    80).execute(mMessage);
+        }
+        else
+        {
+            View v = findViewById(android.R.id.content);
+            Snackbar.make(v, "No esta conectado al módulo",
+                    Snackbar.LENGTH_LONG).show();
+        }
     }
 }
