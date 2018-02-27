@@ -332,7 +332,7 @@
     </LinearLayout>
 
     <com.github.clans.fab.FloatingActionMenu
-        android:id="@+id/menu_purchase_dates"
+        android:id="@+id/clock_menu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"

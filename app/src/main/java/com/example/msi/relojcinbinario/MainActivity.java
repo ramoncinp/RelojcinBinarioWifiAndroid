@@ -24,9 +24,13 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 import android.support.design.widget.Snackbar;
 import android.widget.Toolbar;
+
+import com.github.clans.fab.FloatingActionButton;
+import com.github.clans.fab.FloatingActionMenu;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -46,7 +50,7 @@ public class MainActivity extends AppCompatActivity
     private String minutos = "";
     private String alarmTime = "";
 
-    Toolbar toolbar;
+    private FloatingActionMenu fam;
 
     private Button hd1;
     private Button hd2;
@@ -146,7 +150,6 @@ public class MainActivity extends AppCompatActivity
                                 connectedToWifi = false;
                             }
                         }
-                        connectedToWifi = true;
                     }
                     else
                     {
@@ -198,6 +201,69 @@ public class MainActivity extends AppCompatActivity
 
         initButtonArray();
         digitalToBinaryClock();
+
+        fam = (FloatingActionMenu) findViewById(R.id.clock_menu);
+        fam.setVisibility(View.GONE);
+
+        FloatingActionButton sync = (FloatingActionButton) findViewById(R.id.sync);
+        sync.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                if (connectedToWifi)
+                {
+                    sendTime();
+                    Toast.makeText(MainActivity.this,
+                            "Sincronizando",
+                            Toast.LENGTH_LONG).show();
+                }
+                else
+                {
+                    View view = findViewById(android.R.id.content);
+                    Snackbar.make(view, "No está conectado al módulo WiFi",
+                            Snackbar.LENGTH_LONG).show();
+                }
+            }
+        });
+
+        FloatingActionButton netInfo = (FloatingActionButton) findViewById(R.id.config_network);
+        netInfo.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                Intent i = new Intent(MainActivity.this, MyPreferencesActivity.class);
+                startActivityForResult(i, 1);
+            }
+        });
+
+        FloatingActionButton alarmButton = (FloatingActionButton) findViewById(R.id.set_alarm);
+        alarmButton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                setAlarm();
+            }
+        });
+
+        LinearLayout linearLayout = (LinearLayout) findViewById(R.id.clock_content_view);
+        linearLayout.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                if (fam.getVisibility() == View.VISIBLE)
+                {
+                    fam.setVisibility(View.GONE);
+                }
+                else
+                {
+                    fam.setVisibility(View.VISIBLE);
+                }
+            }
+        });
     }
 
     private void sendTime()
@@ -604,7 +670,7 @@ public class MainActivity extends AppCompatActivity
         else
         {
             View v = findViewById(android.R.id.content);
-            Snackbar.make(v, "No esta conectado al módulo",
+            Snackbar.make(v, "No está conectado al módulo",
                     Snackbar.LENGTH_LONG).show();
         }
     }
