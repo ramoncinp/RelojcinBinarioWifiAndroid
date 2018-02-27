@@ -24,7 +24,6 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.DateFormat;
@@ -58,8 +57,6 @@ public class MainActivity extends AppCompatActivity
     private Button mu2;
     private Button mu3;
     private Button mu4;
-
-    private TextView connectionStatus;
 
     private Client.OnMessageReceived clientListener = new Client.OnMessageReceived()
     {
@@ -151,7 +148,6 @@ public class MainActivity extends AppCompatActivity
                     {
                         connectedToWifi = false;
                     }
-                    evaluateConnection();
                 }
             }
         }
@@ -177,8 +173,6 @@ public class MainActivity extends AppCompatActivity
         mu3 = (Button) findViewById(R.id.mu3);
         mu4 = (Button) findViewById(R.id.mu4);
 
-        connectionStatus = (TextView) findViewById(R.id.connectionStatus);
-
         tickReceiver = new BroadcastReceiver()
         {
             @Override
@@ -196,8 +190,6 @@ public class MainActivity extends AppCompatActivity
         //Register the broadcast receiver to receive TIME_TICK
         registerReceiver(tickReceiver, new IntentFilter(Intent.ACTION_TIME_TICK));
 
-        evaluateConnection();
-
         initButtonArray();
         digitalToBinaryClock();
     }
@@ -210,17 +202,6 @@ public class MainActivity extends AppCompatActivity
         paquete += "m" + minutos + '\n';
 
         sendMessage(paquete);
-    }
-
-    private void evaluateConnection()
-    {
-        if (connectionStatus != null)
-        {
-            if (connectedToWifi)
-                connectionStatus.setText("CONECTADO");
-            else
-                connectionStatus.setText("DESCONECTADO");
-        }
     }
 
     @Override
@@ -267,7 +248,8 @@ public class MainActivity extends AppCompatActivity
     {
         View checkBoxView = View.inflate(this, R.layout.alarmsettings, null);
         final CheckBox checkBox = (CheckBox) checkBoxView.findViewById(R.id.checkbox);
-        final EditText edittext = (EditText) checkBoxView.findViewById(R.id.edittexthour);
+        final EditText edittext1 = (EditText) checkBoxView.findViewById(R.id.hour);
+        final EditText edittext2 = (EditText) checkBoxView.findViewById(R.id.minutes);
         checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
         {
             @Override
@@ -290,7 +272,8 @@ public class MainActivity extends AppCompatActivity
         if (alarmActivated)
         {
             checkBox.setChecked(true);
-            edittext.setText(alarmTime);
+            edittext1.setText(alarmTime.substring(0, alarmTime.indexOf(":")));
+            edittext2.setText(alarmTime.substring(alarmTime.indexOf(":") + 1));
         }
         else
         {
@@ -306,13 +289,15 @@ public class MainActivity extends AppCompatActivity
                 {
                     public void onClick(DialogInterface dialog, int id)
                     {
-                        alarmTime = edittext.getText().toString();
+                        alarmTime = edittext1.getText().toString();
+                        alarmTime += ":";
+                        alarmTime += edittext2.getText().toString();
+
                         if (checkBox.isChecked())
                         {
                             alarmActivated = true;
                             sendMessage("a" + alarmTime + '\n');
                             Toast.makeText(getApplicationContext(), "Alarma configurada", Toast.LENGTH_SHORT).show();
-
                         }
                         else
                         {
@@ -342,6 +327,7 @@ public class MainActivity extends AppCompatActivity
                 if (!paquete.equals(""))
                 {
                     //mTcpClient.sendMessage(paquete);
+                    sendMessage(paquete);
                     Toast.makeText(this, "Editando información", Toast.LENGTH_SHORT).show();
                 }
 
@@ -550,16 +536,6 @@ public class MainActivity extends AppCompatActivity
         String incomingMessage;
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        /*
-                paquete += "s" + sharedPrefs.getString("ssid", "") + '\n';
-        paquete += "c" + sharedPrefs.getString("pass", "") + '\n';
-        paquete += "i" + sharedPrefs.getString("ip", "") + '\n';
-        paquete += "p" + sharedPrefs.getString("port", "") + '\n';
-        paquete += "m" + sharedPrefs.getString("placas", "") + '\n';
-        paquete += "d" + sharedPrefs.getString("engdisp", "") + '\n';
-
-
-         */
 
         while (completeMessage.contains("\n"))
         {
