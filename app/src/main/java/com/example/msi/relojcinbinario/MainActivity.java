@@ -26,6 +26,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Toast;
 import android.support.design.widget.Snackbar;
+import android.widget.Toolbar;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -44,6 +45,8 @@ public class MainActivity extends AppCompatActivity
     private String horas = "";
     private String minutos = "";
     private String alarmTime = "";
+
+    Toolbar toolbar;
 
     private Button hd1;
     private Button hd2;
@@ -159,6 +162,8 @@ public class MainActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        if (getSupportActionBar() != null) getSupportActionBar().hide();
 
         hd1 = (Button) findViewById(R.id.hd1);
         hd2 = (Button) findViewById(R.id.hd2);
