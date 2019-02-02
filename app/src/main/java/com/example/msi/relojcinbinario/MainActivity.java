@@ -17,6 +17,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,8 +33,16 @@ import android.widget.Toolbar;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.Date;
 
 public class MainActivity extends AppCompatActivity
@@ -211,19 +220,16 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View v)
             {
-                if (connectedToWifi)
+                Thread mThread = new Thread(new Runnable()
                 {
-                    sendTime();
-                    Toast.makeText(MainActivity.this,
-                            "Sincronizando",
-                            Toast.LENGTH_LONG).show();
-                }
-                else
-                {
-                    View view = findViewById(android.R.id.content);
-                    Snackbar.make(view, "No está conectado al módulo WiFi",
-                            Snackbar.LENGTH_LONG).show();
-                }
+                    @Override
+                    public void run()
+                    {
+                        syncWithFoundDevice();
+                    }
+                });
+
+                mThread.start();
             }
         });
 
@@ -264,6 +270,59 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         });
+    }
+
+    private void syncWithFoundDevice()
+    {
+        DatagramSocket c;
+        try
+        {
+            c = new DatagramSocket();
+            c.setBroadcast(true);
+
+            byte[] sendData = "EVERYTHING IS COPACETIC".getBytes();
+
+            try
+            {
+                DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length,
+                        InetAddress.getByName("255.255.255.255"), 2500);
+                c.send(sendPacket);
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+
+            //Obtener respuestas de los dispositivos de la red
+            while (true)
+            {
+                try
+                {
+                    byte[] recvBuf = new byte[256];
+                    DatagramPacket receivePacket = new DatagramPacket(recvBuf, recvBuf.length);
+                    c.setSoTimeout(5000);
+                    c.receive(receivePacket);
+
+                    //Si hubo respuesta y no hubo timeout, obtener datos del dispositivo
+                    String ipAdress = receivePacket.getAddress().getHostAddress();
+                    //Check if the message is correct
+                    String message = new String(receivePacket.getData()).trim();
+
+                    Log.d("Relojcin", "IP -> " + ipAdress + "\nMessage -> " + message);
+                }
+                catch (IOException e)
+                {
+                    break;
+                }
+            }
+
+            //Close the port!
+            c.close();
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
     }
 
     private void sendTime()

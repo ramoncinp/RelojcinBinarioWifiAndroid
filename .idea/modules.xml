@@ -3,6 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/RelojcinBinario.iml" filepath="$PROJECT_DIR$/RelojcinBinario.iml" />
+      <module fileurl="file://$PROJECT_DIR$/RelojcinBinarioWifiAndroid.iml" filepath="$PROJECT_DIR$/RelojcinBinarioWifiAndroid.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
